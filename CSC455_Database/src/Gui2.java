@@ -48,6 +48,16 @@ public class Gui2 extends JFrame{
 		setTitle("RIP_Blockbuster");
 		
 		buildMenu();
+		
+		ImageIcon banner = new ImageIcon("Resources/moviebanner2.png");
+        	JLabel label5 = new JLabel(banner);
+        	ImageIcon newr = new ImageIcon("Resources/curtains2.jpg");
+        	JLabel label7 = new JLabel(newr);
+        	JLabel label6 = new JLabel(newr);
+        	add(label5, BorderLayout.NORTH);
+        	add(label6, BorderLayout.EAST);
+        	add(label7, BorderLayout.WEST);
+        	getContentPane().setBackground(new Color(50, 50, 50));
 
 		setVisible(true);
 		
@@ -68,40 +78,79 @@ public class Gui2 extends JFrame{
 		fileMenu = new JMenu("Member Functions");
 		fileMenu2 = new JMenu("Administrative Functions");
 		fileMenu3 = new JMenu("Reporting Functions");
-		fileMenu4 = new JMenu("Quit");
-		
-		
-		//menuItem.addActionListener(eh);
+	
 		JMenuItem menuItem = new JMenuItem("Video Checkout");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("bench");
 			}
 		});
-
 		fileMenu.add(menuItem);
+		
 		menuItem = new JMenuItem("New Member Signup");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu.add(menuItem);
+		
 		menuItem = new JMenuItem("List of outstanding videos");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu.add(menuItem);
+		
 		menuItem = new JMenuItem("Member Cancellation");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu.add(menuItem);
+		
 		menuItem = new JMenuItem("Video Purchase");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu.add(menuItem);
 		
-		//menuItem.addActionListener(eh);
 		menuItem = new JMenuItem("Video Return");
-		fileMenu2.add(menuItem);
-		menuItem = new JMenuItem("Add/Delete Employee");
-		fileMenu2.add(menuItem);
-		menuItem = new JMenuItem("Process new shipment of videos");
-		fileMenu2.add(menuItem);
-		menuItem = new JMenuItem("Open new store");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu2.add(menuItem);
 		
+		menuItem = new JMenuItem("Add/Delete Employee");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
+		fileMenu2.add(menuItem);
+		
+		menuItem = new JMenuItem("Process new shipment of videos");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
+		fileMenu2.add(menuItem);
+		
+		menuItem = new JMenuItem("Open new store");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
+		fileMenu2.add(menuItem);
 
-		//menuItem = new JMenu("Reporting Functions");
-		//menuItem.addActionListener(eh);
 		menuItem = new JMenuItem("Print Catalog");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -124,8 +173,15 @@ public class Gui2 extends JFrame{
 			}
 		});
 		fileMenu3.add(menuItem);
+		
 		menuItem = new JMenuItem("Print due list of videos");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu3.add(menuItem);
+		
 		menuItem = new JMenuItem("Print employee commission report");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -150,17 +206,19 @@ public class Gui2 extends JFrame{
 			}
 		});
 		fileMenu3.add(menuItem);
+		
 		menuItem = new JMenuItem("Print rental summary");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bench");
+			}
+		});
 		fileMenu3.add(menuItem);
-		
-
-		
 		
 		menuBar.add(fileMenu);
 		menuBar.add(fileMenu2);
 		menuBar.add(fileMenu3);
-		menuBar.add(fileMenu4);
-		
+
 		setJMenuBar(menuBar);
 	}
 	
@@ -170,7 +228,7 @@ public class Gui2 extends JFrame{
         mainPanel.setBackground(new Color(50, 50, 50));
 
         mainPanel.setBorder(
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
         );
 
         layout = new CardLayout();
@@ -181,8 +239,8 @@ public class Gui2 extends JFrame{
         horka3 = new ImageIcon("Resources/walle.jpg");
         horka4 = new ImageIcon("Resources/lotrjpg.jpg");
 
-        previ = new ImageIcon("Resources/arrow-alt-left.png");
-        nexti = new ImageIcon("Resources/arrow-alt-right.png");
+        previ = new ImageIcon("Resources/arrow-27.png");
+        nexti = new ImageIcon("Resources/rightarrow-27.png");
 
         JLabel label1 = new JLabel(horka1);
         JLabel label2 = new JLabel(horka2);
@@ -197,11 +255,13 @@ public class Gui2 extends JFrame{
         add(mainPanel);
 
         JButton prevButton = new JButton(previ);
+	prevButton.setBackground(Color.WHITE);
         prevButton.addActionListener((ActionEvent e) -> {
             layout.previous(mainPanel);
         });
 
         JButton nextButton = new JButton(nexti);
+	nextButton.setBackground(Color.WHITE);
         nextButton.addActionListener((ActionEvent e) -> {
             layout.next(mainPanel);
         });
