@@ -36,7 +36,7 @@ cost		decimal(4, 2) NOT NULL,
 category	varchar(20) NOT NULL,
 rent_price	decimal(4, 2) NOT NULL,
 sale_price	decimal(4, 2) NOT NULL,
-purchase_date	date NOT NULL,
+purchase_date	DATE NOT NULL,
 vendor_name	varchar(50) NOT NULL,
 qoh			INT NOT NULL,
 primary key (stock_num, v_id),
@@ -79,3 +79,35 @@ foreign key (m_id) references members (m_id),
 CONSTRAINT FK_S foreign key (stock_num, v_id) references movies (stock_num, v_id),
 foreign key (e_id) references employees (e_id)
 ) ENGINE = INNODB;
+
+CREATE FUNCTION RentalTime(r_date_out DATE) RETURN DATE
+	DETERMINISTIC
+BEGIN
+	DECLARE returnDate DATE;
+	SET returnDate = DATEADD(DAY, 3, r_date_out);
+	RETURN (returnDate);
+END
+
+CREATE FUNCTION getDate() RETURN DATE
+	DETERMINISTIC
+BEGIN
+	DECLARE this_Date DATE;
+	SET this_Date = CURRENT_DATE();
+	RETURN (this_Date);
+END
+
+CREATE PROCEDURE pointLookup(member_id INT)
+BEGIN
+	SELECT lname, fname, bonus_points FROM members WHERE m_id = member_id;
+END
+
+CREATE PROCEDURE checkPrice(video_id INT)
+BEGIN
+	SELECT title, rent_price, sale_price FROM movies WHERE v_id = video_id;
+END
+
+
+CREATE TRIGGER 
+
+
+
