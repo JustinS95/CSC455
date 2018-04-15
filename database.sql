@@ -5,6 +5,10 @@ drop table if exists employees;
 drop table if exists members;
 drop table if exists store;
 drop table if exists vendors;
+drop procedure if exists pointLookup;
+drop procedure if exists checkPrice;
+drop function if exists rentalTime;
+drop function if exists getData;
 
 create table store
 (store_num	INT NOT NULL,
@@ -54,60 +58,71 @@ primary key (m_id)
 
 create table rentals
 (rental_num	INT NOT NULL,
-m_id		INT NOT NULL,
+m_id		INT,
 stock_num	INT NOT NULL,
 v_id		INT NOT NULL,
-e_id		INT NOT NULL,
+e_id		INT,
 date_out	date NOT NULL,
 frequency	varchar(10) NOT NULL,
 date_in		date NOT NULL,
 primary key (rental_num),
-foreign key (m_id) references members (m_id),
+CONSTRAINT FK_M foreign key (m_id) references members (m_id) ON DELETE SET NULL ON UPDATE CASCADE,
 CONSTRAINT FK_R foreign key (stock_num, v_id) references movies (stock_num, v_id),
-foreign key (e_id) references employees (e_id)
+CONSTRAINT FK_E foreign key (e_id) references employees (e_id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = INNODB;
 
 create table sales
 (sale_num	INT NOT NULL,
-m_id		INT NOT NULL,
+m_id		INT,
 stock_num	INT NOT NULL,
 v_id		INT NOT NULL,
-e_id		INT NOT NULL,
+e_id		INT,
 sale_date	date NOT NULL,
 primary key (sale_num),
-foreign key (m_id) references members (m_id),
+foreign key (m_id) references members (m_id) ON DELETE SET NULL ON UPDATE CASCADE,
 CONSTRAINT FK_S foreign key (stock_num, v_id) references movies (stock_num, v_id),
-foreign key (e_id) references employees (e_id)
+foreign key (e_id) references employees (e_id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = INNODB;
 
-CREATE FUNCTION RentalTime(r_date_out DATE) RETURN DATE
-	DETERMINISTIC
+DELIMITER $$
+
+CREATE FUNCTION rentalTime(r_date_out DATE) RETURNS DATE
 BEGIN
 	DECLARE returnDate DATE;
 	SET returnDate = DATEADD(DAY, 3, r_date_out);
 	RETURN (returnDate);
-END
+END $$
 
-CREATE FUNCTION getDate() RETURN DATE
-	DETERMINISTIC
+DELIMITER ; 
+
+DELIMITER $$
+
+CREATE FUNCTION getDate() RETURNS DATE
 BEGIN
 	DECLARE this_Date DATE;
 	SET this_Date = CURRENT_DATE();
 	RETURN (this_Date);
-END
+END$$
 
-CREATE PROCEDURE pointLookup(member_id INT)
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE pointLookup(in member_id INTEGER)
 BEGIN
 	SELECT lname, fname, bonus_points FROM members WHERE m_id = member_id;
-END
+END $$
 
-CREATE PROCEDURE checkPrice(video_id INT)
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE checkPrice(in video_id INTEGER)
 BEGIN
 	SELECT title, rent_price, sale_price FROM movies WHERE v_id = video_id;
-END
+END $$
 
-
-CREATE TRIGGER 
+DELIMITER ;
 
 
 
