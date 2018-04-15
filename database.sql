@@ -8,7 +8,7 @@ drop table if exists vendors;
 drop procedure if exists pointLookup;
 drop procedure if exists checkPrice;
 drop function if exists rentalTime;
-drop function if exists getData;
+drop function if exists thisDate;
 
 create table store
 (store_num	INT NOT NULL,
@@ -62,9 +62,9 @@ m_id		INT,
 stock_num	INT NOT NULL,
 v_id		INT NOT NULL,
 e_id		INT,
-date_out	date NOT NULL,
+date_out	date,
 frequency	varchar(10) NOT NULL,
-date_in		date NOT NULL,
+date_in		date,
 primary key (rental_num),
 CONSTRAINT FK_M foreign key (m_id) references members (m_id) ON DELETE SET NULL ON UPDATE CASCADE,
 CONSTRAINT FK_R foreign key (stock_num, v_id) references movies (stock_num, v_id),
@@ -85,44 +85,34 @@ foreign key (e_id) references employees (e_id) ON DELETE SET NULL ON UPDATE CASC
 ) ENGINE = INNODB;
 
 DELIMITER $$
-
 CREATE FUNCTION rentalTime(r_date_out DATE) RETURNS DATE
 BEGIN
 	DECLARE returnDate DATE;
-	SET returnDate = DATEADD(DAY, 3, r_date_out);
+	SET returnDate = r_date_out + 3;
 	RETURN (returnDate);
 END $$
-
 DELIMITER ; 
 
 DELIMITER $$
-
-CREATE FUNCTION getDate() RETURNS DATE
+CREATE FUNCTION thisDate() RETURNS DATE
 BEGIN
 	DECLARE this_Date DATE;
-	SET this_Date = CURRENT_DATE();
+	SET this_Date = CURDATE();
 	RETURN (this_Date);
-END$$
-
+END $$
 DELIMITER ;
 
 DELIMITER $$
-
 CREATE PROCEDURE pointLookup(in member_id INTEGER)
 BEGIN
 	SELECT lname, fname, bonus_points FROM members WHERE m_id = member_id;
 END $$
-
 DELIMITER ;
 
 DELIMITER $$
-
 CREATE PROCEDURE checkPrice(in video_id INTEGER)
 BEGIN
 	SELECT title, rent_price, sale_price FROM movies WHERE v_id = video_id;
 END $$
-
 DELIMITER ;
-
-
 
