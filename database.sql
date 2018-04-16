@@ -62,8 +62,9 @@ m_id		INT,
 stock_num	INT NOT NULL,
 v_id		INT NOT NULL,
 e_id		INT,
-date_out	date,
 frequency	varchar(10) NOT NULL,
+date_out	date,
+due_date	date,
 date_in		date,
 primary key (rental_num),
 CONSTRAINT FK_M foreign key (m_id) references members (m_id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -115,4 +116,3 @@ BEGIN
 	SELECT title, rent_price, sale_price FROM movies WHERE v_id = video_id;
 END $$
 DELIMITER ;
-
