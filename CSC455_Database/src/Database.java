@@ -14,8 +14,6 @@ public class Database {
    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
    static final String DB_URL = "jdbc:mysql://152.20.12.152/jds8328?noAccessToProcedureBodies=true&useSSL=false&user="+USER+"&password="+PASS;
    
-
-   
    //creates a new Connection object
    public Connection conn = null;
    
@@ -35,6 +33,6 @@ public class Database {
 		      //Handle errors for Class.forName
 		      e.printStackTrace();
 		   }
-   }
+   	}
 
 }//end class
