@@ -5,10 +5,12 @@ drop table if exists employees;
 drop table if exists members;
 drop table if exists store;
 drop table if exists vendors;
+drop view if exists notRented;
 drop procedure if exists pointLookup;
 drop procedure if exists checkPrice;
 drop function if exists rentalTime;
 drop function if exists thisDate;
+
 
 create table store
 (store_num	INT NOT NULL,
@@ -84,6 +86,12 @@ foreign key (m_id) references members (m_id) ON DELETE SET NULL ON UPDATE CASCAD
 CONSTRAINT FK_S foreign key (stock_num, v_id) references movies (stock_num, v_id),
 foreign key (e_id) references employees (e_id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = INNODB;
+
+CREATE VIEW notRented 
+AS 
+	select m_id from members 
+	where m_id not in  
+	(select m_id from rentals);
 
 DELIMITER $$
 CREATE FUNCTION rentalTime(r_date_out DATE) RETURNS DATE

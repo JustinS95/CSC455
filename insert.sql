@@ -5,6 +5,13 @@ DELETE FROM employees;
 DELETE FROM members;
 DELETE FROM store;
 DELETE FROM vendors;
+DROP TRIGGER if exists rentalDate;
+DROP TRIGGER if exists movieRented;
+DROP TRIGGER if exists movieReturned;
+DROP TRIGGER if exists givePPoints;
+DROP TRIGGER if exists giveRPoints;
+DROP TRIGGER if exists saleDate;
+DROP TRIGGER if exists movieSold;
 
 
 INSERT INTO store VALUES (001, "123 Iverleigh Lane");
@@ -76,10 +83,70 @@ INSERT INTO sales VALUES (10006, 106, 00006, 59870, 2003, '2017-08-10');
 INSERT INTO sales VALUES (10007, 108, 00007, 59871, 1001, '2017-10-31');
 
 DELIMITER $$
-CREATE TRIGGER controlDate BEFORE INSERT ON rentals
+CREATE TRIGGER rentalDate BEFORE INSERT ON rentals
 FOR EACH ROW
 BEGIN
     SET NEW.date_out = thisDate();
     SET NEW.due_date = rentalTime(thisDate());
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER movieRented AFTER INSERT ON rentals
+FOR EACH ROW
+BEGIN
+	UPDATE movies
+	SET movies.qoh = movies.qoh -1
+	WHERE movies.v_id = NEW.v_id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER movieReturned AFTER UPDATE ON rentals
+FOR EACH ROW
+BEGIN
+	IF OLD.date_in is null
+	THEN UPDATE movies
+	SET movies.qoh = movies.qoh + 1
+	WHERE movies.v_id = OLD.v_id;
+END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER givePPoints AFTER INSERT ON rentals
+FOR EACH ROW
+BEGIN
+	UPDATE members
+	SET bonus_points = bonus_points + 1
+	WHERE members.m_id = NEW.m_id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER saleDate BEFORE INSERT ON sales
+FOR EACH ROW
+BEGIN
+    SET NEW.sale_date = thisDate();
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER giveRPoints AFTER INSERT ON sales
+FOR EACH ROW
+BEGIN
+	UPDATE members
+	SET bonus_points = bonus_points + 3
+	WHERE members.m_id = NEW.m_id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER movieSold AFTER INSERT ON sales
+FOR EACH ROW
+BEGIN
+	UPDATE movies
+	SET movies.qoh = movies.qoh -1
+	WHERE movies.v_id = NEW.v_id;
 END $$
 DELIMITER ;
