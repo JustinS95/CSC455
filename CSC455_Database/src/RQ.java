@@ -3,13 +3,70 @@ import java.sql.*;
 /**
  * @author JustinSaunders
  *Class to query the SQL server
- *Manipulates and calls data from the satoshi server
+ *Manipulates and calls data from the database hosted on the satoshi.cis.uncw.edu site
  */
 public class RQ {
 
 	static ResultSet rs = null;
 	static Database data = new Database();
 	static Statement stmt = null;
+	
+	public static ResultSet mostRecentMember() {
+		stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "SELECT m_id FROM members ORDER BY m_id DESC LIMIT 1;";
+	    	  rs = stmt.executeQuery(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	}
+	
+	public static ResultSet mostRecentSale() {
+		stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "SELECT sale_num FROM sales ORDER BY sale_num DESC LIMIT 1;";
+	    	  rs = stmt.executeQuery(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	}
+	
+	public static ResultSet mostRecentRental() {
+		stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "SELECT rental_num FROM rentals ORDER BY rental_num DESC LIMIT 1;";
+	    	  rs = stmt.executeQuery(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	}
 	
 	public static ResultSet getOutstanding() {
 		stmt = null;
@@ -90,7 +147,24 @@ public class RQ {
 	      try {
 	    	  stmt = data.conn.createStatement();
 	    	  String sql;
-	    	  sql = "INSERT INTO store values(" + store_num + ", " + "\'" + address + "\'" +  ");";
+	    	  sql = "INSERT INTO store values(" + store_num + ", " + "\'" + address + "\'" + ");";
+	    	  stmt.executeUpdate(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }		
+	}
+	
+	public static void addMember(String m_id, String lname, String fname, String address) {
+		stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "INSERT INTO members values(" + m_id + ", " + "\'" + lname + "\'" + ", " + "\'" + fname + "\'" + ", " + "\'" + address + "\'" + ", 0" + ");";
 	    	  stmt.executeUpdate(sql);
 	      }catch(SQLException se) {
 	    	      //Handle errors for JDBC
@@ -149,7 +223,7 @@ public class RQ {
 	      try {
 	    	  stmt = data.conn.createStatement();
 	    	  String sql;
-	    	  sql = "SELECT * FROM movies ORDER BY title";
+	    	  sql = "SELECT * FROM movies ORDER BY v_id";
 	    	  rs = stmt.executeQuery(sql);
 	      }catch(SQLException se) {
 	    	      //Handle errors for JDBC
@@ -175,6 +249,48 @@ public class RQ {
 	    	  stmt = data.conn.createStatement();
 	    	  String sql;
 	    	  sql = "SELECT * FROM members ORDER BY m_id";
+	    	  rs = stmt.executeQuery(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	       }
+	
+	public static ResultSet getNotRented() {
+		
+	      //Create a statement and execute a query
+		  stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "SELECT * FROM notRented ORDER BY m_id";
+	    	  rs = stmt.executeQuery(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	       }
+	
+	public static ResultSet getTimesRented() {
+		
+	      //Create a statement and execute a query
+		  stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "SELECT m_id, COUNT(m_id) AS times_rented from rentals GROUP BY m_id;";
 	    	  rs = stmt.executeQuery(sql);
 	      }catch(SQLException se) {
 	    	      //Handle errors for JDBC
@@ -238,7 +354,7 @@ public class RQ {
 	           }	
 	}
 	
-	public static void RemoveEmployee(String employee_id) {
+	public static void removeEmployee(String employee_id) {
 		
 		  //Create a statement and execute a query
 		  Statement stmt = null;
@@ -247,6 +363,56 @@ public class RQ {
 	      String sql;
 	      //Delete movie from database
 	      sql = "DELETE FROM employees WHERE  e_id = " + "\'" + employee_id + "\'";
+	      stmt.executeUpdate(sql);
+	      //Clean-up environment
+	      stmt.close();
+	      }catch(SQLException se){
+	          //Handle errors for JDBC
+	          se.printStackTrace();
+	       }catch(Exception e){
+	          //Handle errors for Class.forName
+	          e.printStackTrace();}
+	          try{
+	              if(stmt!=null)
+	                 stmt.close();
+	           }catch(SQLException se2){
+	           }	
+		}
+	
+	public static void addRental(String rental_num, String m_id, String stock_num, String v_id, String e_id) {
+		
+		  //Create a statement and execute a query
+		  Statement stmt = null;
+	      try {
+	      stmt = data.conn.createStatement();
+	      String sql;
+	      //Delete movie from database
+	      sql = "INSERT INTO rentals VALUES(" + rental_num + ", " + m_id + ", " + stock_num + ", " + v_id + ", " + e_id + ", " + "\'" + "2-3/month" + "\'" + ", null, null, null);";
+	      stmt.executeUpdate(sql);
+	      //Clean-up environment
+	      stmt.close();
+	      }catch(SQLException se){
+	          //Handle errors for JDBC
+	          se.printStackTrace();
+	       }catch(Exception e){
+	          //Handle errors for Class.forName
+	          e.printStackTrace();}
+	          try{
+	              if(stmt!=null)
+	                 stmt.close();
+	           }catch(SQLException se2){
+	           }	
+		}
+	
+	public static void addSale(String sale_num, String m_id, String stock_num, String v_id, String e_id) {
+		
+		  //Create a statement and execute a query
+		  Statement stmt = null;
+	      try {
+	      stmt = data.conn.createStatement();
+	      String sql;
+	      //Delete movie from database
+	      sql = "INSERT INTO sales VALUES(" + sale_num + ", " + m_id + ", " + stock_num + ", " + v_id + ", " + e_id + ", null);";
 	      stmt.executeUpdate(sql);
 	      //Clean-up environment
 	      stmt.close();

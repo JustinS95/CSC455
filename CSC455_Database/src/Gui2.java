@@ -43,7 +43,7 @@ public class Gui2 extends JFrame{
 	public Gui2() {
 		setSize(width, height);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("RIP_Blockbuster");
+		setTitle("Movie Hut");
 		buildMenu();
 		ImageIcon banner = new ImageIcon("Resources/moviebanner2.png");
         	JLabel label5 = new JLabel(banner);
@@ -73,7 +73,30 @@ public class Gui2 extends JFrame{
 		JMenuItem menuItem = new JMenuItem("Video Checkout");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("bench");
+				ResultSet rs = RQ.mostRecentRental();
+				try {
+					while (rs.next()) {
+						String most_recent = rs.getString("rental_num");
+						resultList += most_recent;
+					}
+					String rental_num = JOptionPane.showInputDialog(mainPanel, "Enter a 5-digit Rental Number for the new Rental. Most recent rental number: " + resultList + ".");
+					String m_id = JOptionPane.showInputDialog(mainPanel, "Enter the member's ID.");
+					String stock_num = JOptionPane.showInputDialog(mainPanel, "Enter the Stock Number.");
+					String v_id = JOptionPane.showInputDialog(mainPanel, "Enter the Video ID.");
+					String e_id = JOptionPane.showInputDialog(mainPanel, "Enter the Employee's ID.");
+					if(rental_num != null && !rental_num.equals("")) {
+						RQ.addRental(rental_num, m_id, stock_num, v_id, e_id);
+					}
+					else {
+						JOptionPane.showMessageDialog(mainPanel, "Please enter valid information and try again.");
+					}
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				resultList = "";
+				
 			}
 		});
 		fileMenu.add(menuItem);
@@ -81,12 +104,34 @@ public class Gui2 extends JFrame{
 		menuItem = new JMenuItem("New Member Signup");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("bench");
+				ResultSet rs = RQ.mostRecentMember();
+				try {
+					while (rs.next()) {
+						String most_recent = rs.getString("m_id");
+						resultList += most_recent;
+					}
+				String m_id = JOptionPane.showInputDialog(mainPanel, "Enter the new member's ID. Most Recent Member ID: " + resultList + ".");
+				String lname = JOptionPane.showInputDialog(mainPanel, "Enter Last Name.");
+				String fname = JOptionPane.showInputDialog(mainPanel, "Enter First Name.");
+				String address = JOptionPane.showInputDialog(mainPanel, "Enter Address.");
+				if (m_id != null && !m_id.equals("")) {
+					RQ.addMember(m_id, lname, fname, address);
+				}
+				else {
+					JOptionPane.showMessageDialog(mainPanel, "Please enter valid information and try again.");
+					}
+				}
+				catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				resultList = "";
 			}
+			
 		});
 		fileMenu.add(menuItem);
 		
-		menuItem = new JMenuItem("List of outstanding videos");
+		menuItem = new JMenuItem("List of Outstanding Videos");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ResultSet rs = RQ.getOutstanding();
@@ -132,7 +177,30 @@ public class Gui2 extends JFrame{
 		menuItem = new JMenuItem("Video Purchase");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("bench");
+				ResultSet rs = RQ.mostRecentSale();
+				try {
+					while (rs.next()) {
+						String most_recent = rs.getString("sale_num");
+						resultList += most_recent;
+					}
+					String sale_num = JOptionPane.showInputDialog(mainPanel, "Enter a 5-digit Sale Number for the new Sale. Most recent sale number: " + resultList + ".");
+					String m_id = JOptionPane.showInputDialog(mainPanel, "Enter the member's ID.");
+					String stock_num = JOptionPane.showInputDialog(mainPanel, "Enter the Stock Number.");
+					String v_id = JOptionPane.showInputDialog(mainPanel, "Enter the Video ID.");
+					String e_id = JOptionPane.showInputDialog(mainPanel, "Enter the Employee's ID.");
+					if(sale_num != null && !sale_num.equals("")) {
+						RQ.addSale(sale_num, m_id, stock_num, v_id, e_id);
+					}
+					else {
+						JOptionPane.showMessageDialog(mainPanel, "Please enter valid information and try again.");
+					}
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				resultList = "";
+				
 			}
 		});
 		fileMenu.add(menuItem);
@@ -150,8 +218,7 @@ public class Gui2 extends JFrame{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String employee_id = JOptionPane.showInputDialog(mainPanel, "Enter the ID of the employee you wish to remove.");
-				System.out.println("Removing user with ID: " + employee_id);
-				RQ.RemoveEmployee(employee_id);
+				RQ.removeEmployee(employee_id);
 			}
 		});
 		fileMenu2.add(menuItem);
@@ -163,12 +230,18 @@ public class Gui2 extends JFrame{
 				String name = JOptionPane.showInputDialog(mainPanel, "Enter the name for the employee you wish to add.");
 				String store_num = JOptionPane.showInputDialog(mainPanel, "Enter the Store Number for the employee you wish to add.");
 				String commission_rate = JOptionPane.showInputDialog(mainPanel, "Enter the commission rate for the employee you wish to add.");
-				RQ.addEmployee(employee_id, name, store_num, commission_rate);
+				if (employee_id != null && !employee_id.equals("")) {
+					RQ.addEmployee(employee_id, name, store_num, commission_rate);
+				}
+				else {
+					JOptionPane.showMessageDialog(mainPanel, "Please enter valid information and try again.");
+				}
+				
 			}
 		});
 		fileMenu2.add(menuItem);
 		
-		menuItem = new JMenuItem("Process new shipment of videos");
+		menuItem = new JMenuItem("Process New Shipment of Videos");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("bench");
@@ -181,26 +254,39 @@ public class Gui2 extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String store_num = JOptionPane.showInputDialog(mainPanel, "Enter the store number of the new store.");
 				String address = JOptionPane.showInputDialog(mainPanel, "Enter the new store's address.");
-				RQ.addStore(store_num, address);
+				System.out.println(store_num);
+				if (store_num != null && !store_num.equals("")) {
+					RQ.addStore(store_num, address);
+				}
+				else {
+					JOptionPane.showMessageDialog(mainPanel, "Please enter valid information and try again.");
+				}
 			}
 		});
 		fileMenu2.add(menuItem);
 
-		menuItem = new JMenuItem("Print Catalog");
+		menuItem = new JMenuItem("View Inventory");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ResultSet rs = RQ.getMovies();
 				try {
 					while (rs.next()) {
 						String title = rs.getString("title");
+						String stock_num = rs.getString("stock_num");
+						String v_id = rs.getString("v_id");
+						String qoh = rs.getString("qoh");
 						str_List.add(title);
+						str_List2.add(stock_num);
+						str_List3.add(v_id);
+						str_List4.add(qoh);
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				resultList += "Quantity | Video ID | Stock Number | Title \n";
 				for (int x = 0; x < str_List.size(); x++) {
-					resultList += str_List.get(x) + "\n";
+					resultList += str_List4.get(x) + "   |   " + str_List3.get(x) + "   |   " + str_List2.get(x) + "   |   " + str_List.get(x) + "\n";
 				}
 				JOptionPane.showMessageDialog(mainPanel, resultList);
 				resultList = "";
@@ -212,7 +298,7 @@ public class Gui2 extends JFrame{
 		});
 		fileMenu3.add(menuItem);
 		
-		menuItem = new JMenuItem("Print due list of videos");
+		menuItem = new JMenuItem("List of Videos Due");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String date = JOptionPane.showInputDialog(mainPanel, "Enter the date in the format YYYY-MM-DD.");
@@ -243,7 +329,45 @@ public class Gui2 extends JFrame{
 		});
 		fileMenu3.add(menuItem);
 		
-		menuItem = new JMenuItem("Print employee commission report");
+		menuItem = new JMenuItem("Member's Rental History");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ResultSet rs = RQ.getNotRented();
+				ResultSet rs2 = RQ.getTimesRented();
+				try {
+					while (rs.next()) {
+						String m_id = rs.getString("m_id");
+						str_List.add(m_id);
+					}
+					while (rs2.next()) {
+						String m_id2 = rs2.getString("m_id");
+						String times_rented = rs2.getString("times_rented");
+						str_List2.add(m_id2);
+						str_List3.add(times_rented);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				resultList += "Member ID  | Times Rented \n";
+				for (int x = 0; x < str_List.size(); x++) {
+					resultList += str_List.get(x) + "             |         0 " + "\n";
+				}
+				for (int x = 0; x < str_List2.size(); x++) {
+					resultList += str_List2.get(x) + "             |         " + str_List3.get(x) + "\n";
+				}
+				JOptionPane.showMessageDialog(mainPanel, resultList);
+				resultList = "";
+				str_List.clear();
+				str_List2.clear();
+				str_List3.clear();
+				str_List4.clear();
+				
+			}
+		});
+		fileMenu3.add(menuItem);
+		
+		menuItem = new JMenuItem("Employee Commission Report");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ResultSet rs = RQ.getCommission();
@@ -272,12 +396,12 @@ public class Gui2 extends JFrame{
 		});
 		fileMenu3.add(menuItem);
 		
-		menuItem = new JMenuItem("Print Member List");
+		menuItem = new JMenuItem("Member List");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ResultSet rs = RQ.getMembers();
 				try {
-					while (rs.next()) {
+					while (rs.next()) {						
 						String fname = rs.getString("fname");
 						String m_id = rs.getString("m_id");
 						String lname = rs.getString("lname");
@@ -289,9 +413,9 @@ public class Gui2 extends JFrame{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				resultList += "Member ID | First Name | Last Name \n";
+				resultList += "Member ID | First Name | Last Name | Times Rented \n";
 				for (int x = 0; x < str_List.size(); x++) {
-					resultList += str_List.get(x) + "    |    " + str_List2.get(x) + "   |   " +  str_List3.get(x) +  "\n";
+					resultList += str_List.get(x) + "    |    " + str_List2.get(x) + "   |   " +  str_List3.get(x) + "\n";
 				}
 				JOptionPane.showMessageDialog(mainPanel, resultList);
 				resultList = "";
@@ -303,7 +427,7 @@ public class Gui2 extends JFrame{
 		});
 		fileMenu3.add(menuItem);
 		
-		menuItem = new JMenuItem("Print rental summary");
+		menuItem = new JMenuItem("Rental History");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ResultSet rs = RQ.getRentals();
@@ -377,13 +501,13 @@ public class Gui2 extends JFrame{
         add(mainPanel);
 
         JButton prevButton = new JButton(previ);
-	prevButton.setBackground(Color.WHITE);
+        prevButton.setBackground(Color.WHITE);
         prevButton.addActionListener((ActionEvent e) -> {
             layout.previous(mainPanel);
         });
 
         JButton nextButton = new JButton(nexti);
-	nextButton.setBackground(Color.WHITE);
+        nextButton.setBackground(Color.WHITE);
         nextButton.addActionListener((ActionEvent e) -> {
             layout.next(mainPanel);
         });
