@@ -92,7 +92,7 @@ public class RQ {
 	      try {
 	    	  stmt = data.conn.createStatement();
 	    	  String sql;
-	    	  sql = "SELECT rental_num, m_id, date_out, date_in FROM rentals;";
+	    	  sql = "SELECT rental_num, m_id, date_out, due_date FROM rentals;";
 	    	  rs = stmt.executeQuery(sql);
 	      }catch(SQLException se) {
 	    	      //Handle errors for JDBC
@@ -336,7 +336,6 @@ public class RQ {
 	      try {
 	      stmt = data.conn.createStatement();
 	      String sql;
-	      //Delete movie from database
 	      sql = "DELETE FROM members WHERE  m_id = " + "\'" + member_id + "\'";
 	      stmt.executeUpdate(sql);
 	      //Clean-up environment
@@ -361,7 +360,6 @@ public class RQ {
 	      try {
 	      stmt = data.conn.createStatement();
 	      String sql;
-	      //Delete movie from database
 	      sql = "DELETE FROM employees WHERE  e_id = " + "\'" + employee_id + "\'";
 	      stmt.executeUpdate(sql);
 	      //Clean-up environment
@@ -386,7 +384,6 @@ public class RQ {
 	      try {
 	      stmt = data.conn.createStatement();
 	      String sql;
-	      //Delete movie from database
 	      sql = "INSERT INTO rentals VALUES(" + rental_num + ", " + m_id + ", " + stock_num + ", " + v_id + ", " + e_id + ", " + "\'" + "2-3/month" + "\'" + ", null, null, null);";
 	      stmt.executeUpdate(sql);
 	      //Clean-up environment
@@ -411,7 +408,6 @@ public class RQ {
 	      try {
 	      stmt = data.conn.createStatement();
 	      String sql;
-	      //Delete movie from database
 	      sql = "INSERT INTO sales VALUES(" + sale_num + ", " + m_id + ", " + stock_num + ", " + v_id + ", " + e_id + ", null);";
 	      stmt.executeUpdate(sql);
 	      //Clean-up environment
@@ -426,7 +422,97 @@ public class RQ {
 	              if(stmt!=null)
 	                 stmt.close();
 	           }catch(SQLException se2){
-	           }	
+	        }	
+		}
+
+	public static void startTransact() {
+		//Create a statement and execute a query
+		  Statement stmt = null;
+	      try {
+	      stmt = data.conn.createStatement();
+	      stmt.executeQuery("start transaction;");
+	      //Clean-up environment
+	      stmt.close();
+	      }catch(SQLException se){
+	          //Handle errors for JDBC
+	          se.printStackTrace();
+	       }catch(Exception e){
+	          //Handle errors for Class.forName
+	          e.printStackTrace();}
+	          try{
+	              if(stmt!=null)
+	                 stmt.close();
+	           }catch(SQLException se2){
+	        }
+		
+	}
+	
+	public static void rollback() {
+		//Create a statement and execute a query
+		  Statement stmt = null;
+	      try {
+	      stmt = data.conn.createStatement();
+	      stmt.executeQuery("rollback;");
+	      //Clean-up environment
+	      stmt.close();
+	      }catch(SQLException se){
+	          //Handle errors for JDBC
+	          se.printStackTrace();
+	       }catch(Exception e){
+	          //Handle errors for Class.forName
+	          e.printStackTrace();}
+	          try{
+	              if(stmt!=null)
+	                 stmt.close();
+	           }catch(SQLException se2){
+	        }
+		
+	}
+	
+	public static void commit() {
+		//Create a statement and execute a query
+		  Statement stmt = null;
+	      try {
+	      stmt = data.conn.createStatement();
+	      stmt.executeQuery("commit;");
+	      //Clean-up environment
+	      stmt.close();
+	      }catch(SQLException se){
+	          //Handle errors for JDBC
+	          se.printStackTrace();
+	       }catch(Exception e){
+	          //Handle errors for Class.forName
+	          e.printStackTrace();}
+	          try{
+	              if(stmt!=null)
+	                 stmt.close();
+	           }catch(SQLException se2){
+	        }
+		
+	}
+	
+	public static void addMovie(String v_id, String stock_num, String title, String cost, String category, String rent_price, String sale_price, String vendor_name, String qoh) {
+		
+		  //Create a statement and execute a query
+		  Statement stmt = null;
+	      try {
+	      stmt = data.conn.createStatement();
+	      String sql;
+	      sql = "INSERT INTO movies VALUES(" + v_id + ", " + stock_num + ", " + "\'" + title + "\'" + ", " + cost + ", " + "\'" + category + "\'" + ", " + rent_price + ", " + sale_price + ", null, " + "\'" + vendor_name +"\'" + ", " + qoh + ");";
+	      stmt.executeUpdate(sql);
+	      //Clean-up environment
+	      stmt.close();
+	      }catch(SQLException se){
+	          //Handle errors for JDBC
+	          se.printStackTrace();
+	       }catch(Exception e){
+	          //Handle errors for Class.forName
+	          e.printStackTrace();}
+	          try{
+	              if(stmt!=null)
+	                 stmt.close();
+	           }catch(SQLException se2){
+	        }	
 		}
 }
 

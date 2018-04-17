@@ -17,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 @SuppressWarnings("serial")
 public class Gui2 extends JFrame{
@@ -39,6 +40,7 @@ public class Gui2 extends JFrame{
     static ArrayList<String> str_List3 = new ArrayList<String>();
     static ArrayList<String> str_List4 = new ArrayList<String>();
 	static String resultList = "";
+	static Boolean addAnother = true;
 
 	public Gui2() {
 		setSize(width, height);
@@ -244,7 +246,39 @@ public class Gui2 extends JFrame{
 		menuItem = new JMenuItem("Process New Shipment of Videos");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("bench");
+				int userInput = Integer.parseInt(JOptionPane.showInputDialog(mainPanel, "How many movies are you adding?"));
+				String vendor_name = JOptionPane.showInputDialog(mainPanel, "Enter the Vendor name.");
+				RQ.startTransact();
+				for (int x = 0; x < userInput; x++) {
+					String v_id = JOptionPane.showInputDialog(mainPanel, "Enter ID for the movie.");
+					String stock_num = JOptionPane.showInputDialog(mainPanel, "Enter stock number for the movie.");
+					String title = JOptionPane.showInputDialog(mainPanel, "Enter title for the movie");
+					String cost = JOptionPane.showInputDialog(mainPanel, "Enter the cost for the movie.");
+					String category = JOptionPane.showInputDialog(mainPanel, "Enter the genre for the movie.");
+					String rent_price = JOptionPane.showInputDialog(mainPanel, "Enter the rental price for the movie.");
+					String sale_price = JOptionPane.showInputDialog(mainPanel, "Enter the sale price for the movie.");
+					String qoh = JOptionPane.showInputDialog(mainPanel, "How many are in stock?");
+					RQ.addMovie(v_id, stock_num, title, cost, category, rent_price, sale_price, vendor_name, qoh);
+				}
+				JPasswordField passwordField = new JPasswordField( );
+				passwordField.setEchoChar( '*' );
+				passwordField.setColumns( 20 );
+				int returnVal = JOptionPane.showConfirmDialog( mainPanel, passwordField, "Enter Password to Confirm Changes", JOptionPane.OK_CANCEL_OPTION );
+				if (returnVal == JOptionPane.OK_OPTION) {
+					@SuppressWarnings("deprecation")
+					String confirm = passwordField.getText();
+					if (confirm.equals("password")) {
+						RQ.commit();
+						JOptionPane.showMessageDialog(mainPanel, "Videos Added.");
+					}
+					else {
+						RQ.rollback();
+						JOptionPane.showMessageDialog(mainPanel, "Changes reverted.");
+					}
+				}
+				//String confirm = JOptionPane.showInputDialog(mainPanel, "Please Enter Password to Commit Changes.");
+				
+				
 			}
 		});
 		fileMenu2.add(menuItem);
@@ -436,7 +470,7 @@ public class Gui2 extends JFrame{
 						String rental_num = rs.getString("rental_num");
 						String m_id = rs.getString("m_id");
 						String date_out = rs.getString("date_out");
-						String date_in = rs.getString("date_in");
+						String date_in = rs.getString("due_date");
 						str_List.add(rental_num);
 						str_List2.add(m_id);
 						str_List3.add(date_out);
