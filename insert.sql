@@ -12,6 +12,7 @@ DROP TRIGGER if exists givePPoints;
 DROP TRIGGER if exists giveRPoints;
 DROP TRIGGER if exists saleDate;
 DROP TRIGGER if exists movieSold;
+DROP TRIGGER if exists purchaseDate;
 
 
 INSERT INTO store VALUES (001, "123 Iverleigh Lane");
@@ -150,3 +151,13 @@ BEGIN
 	WHERE movies.v_id = NEW.v_id;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER purchaseDate BEFORE INSERT ON movies
+FOR EACH ROW
+BEGIN
+    SET NEW.purchase_date = thisDate();
+END $$
+DELIMITER ;
+
+
