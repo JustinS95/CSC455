@@ -304,6 +304,25 @@ public class RQ {
 			return rs;
 	       }
 	
+	public static ResultSet getInfo(String m_id) throws SQLException {
+		try {
+	      //Create a statement and execute a query
+		  stmt = null;
+		  PreparedStatement getUserInfo = data.conn.prepareStatement("select * from members where m_id = ?;");
+		  getUserInfo.setString(1, m_id);
+	    	  rs = getUserInfo.executeQuery();
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	       }
+	
 	public static ResultSet getEmployees() {
 		
 	      //Create a statement and execute a query
@@ -514,5 +533,7 @@ public class RQ {
 	           }catch(SQLException se2){
 	        }	
 		}
+
+	
 }
 

@@ -298,6 +298,38 @@ public class Gui2 extends JFrame{
 			}
 		});
 		fileMenu2.add(menuItem);
+		
+		menuItem = new JMenuItem("View Member's Information");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String memberID = JOptionPane.showInputDialog(mainPanel, "Enter the member's ID.");
+				try {
+					ResultSet rs = RQ.getInfo(memberID);
+					while (rs.next()) {
+						String m_id = rs.getString("m_id");
+						String lname = rs.getString("lname");
+						String fname = rs.getString("fname");
+						String address = rs.getString("address");
+						str_List.add(m_id);
+						str_List2.add(lname);
+						str_List3.add(fname);
+						str_List4.add(address);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				resultList += "Member ID | Last Name | First Name | Address \n";
+				resultList += str_List.get(0) + "      |      " + str_List2.get(0) + "      |      " + str_List3.get(0) + "      |      " + str_List4.get(0) + "\n";
+				JOptionPane.showMessageDialog(mainPanel, resultList);
+				resultList = "";
+				str_List.clear();
+				str_List2.clear();
+				str_List3.clear();
+				str_List4.clear();
+			}
+		});
+		fileMenu2.add(menuItem);
 
 		menuItem = new JMenuItem("View Inventory");
 		menuItem.addActionListener(new ActionListener() {
