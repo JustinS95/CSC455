@@ -10,6 +10,7 @@ drop procedure if exists pointLookup;
 drop procedure if exists checkPrice;
 drop function if exists rentalTime;
 drop function if exists thisDate;
+DEALLOCATE PREPARE getUserInfo;
 
 
 create table store
@@ -124,3 +125,5 @@ BEGIN
 	SELECT title, rent_price, sale_price FROM movies WHERE v_id = video_id;
 END $$
 DELIMITER ;
+
+PREPARE getUserInfo from 'select * from members where m_id = ?';
