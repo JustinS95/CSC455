@@ -445,21 +445,23 @@ public class Gui2 extends JFrame{
 		menuItem = new JMenuItem("Employee Commission Report");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ResultSet rs = RQ.getCommission();
+				ResultSet rs = RQ.getEmployees();
 				try {
 					while (rs.next()) {
 						String commission = rs.getString("commission_rate");
 						String employee = rs.getString("e_id");
+						String store_num = rs.getString("store_num");
 						str_List.add(commission);
 						str_List2.add(employee);
+						str_List3.add(store_num);
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				resultList += "Employee ID | Commission Rate \n";
+				resultList += "Store Number | Employee ID | Commission Rate \n";
 				for (int x = 0; x < str_List.size(); x++) {
-					resultList += str_List2.get(x) + "    |    " + str_List.get(x) + "\n";
+					resultList += str_List3.get(x) + "          |          " + str_List2.get(x) + "           |           " + str_List.get(x) + "\n";
 				}
 				JOptionPane.showMessageDialog(mainPanel, resultList);
 				resultList = "";
@@ -480,17 +482,19 @@ public class Gui2 extends JFrame{
 						String fname = rs.getString("fname");
 						String m_id = rs.getString("m_id");
 						String lname = rs.getString("lname");
+						String b_points = rs.getString("bonus_points");
 						str_List.add(m_id);
 						str_List2.add(fname);
 						str_List3.add(lname);
+						str_List4.add(b_points);
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				resultList += "Member ID | First Name | Last Name \n";
+				resultList += "Member ID | First Name | Last Name | Bonus Points \n";
 				for (int x = 0; x < str_List.size(); x++) {
-					resultList += str_List.get(x) + "    |    " + str_List2.get(x) + "   |   " +  str_List3.get(x) + "\n";
+					resultList += str_List.get(x) + "       |       " + str_List2.get(x) + "      |      " +  str_List3.get(x) + "      |      " + str_List4.get(x) +  "\n";
 				}
 				JOptionPane.showMessageDialog(mainPanel, resultList);
 				resultList = "";
@@ -524,6 +528,38 @@ public class Gui2 extends JFrame{
 				resultList += "Rental Number | Member ID | Date Rented | Due Date \n";
 				for (int x = 0; x < str_List.size(); x++) {
 					resultList += str_List.get(x) + "   |   " + str_List2.get(x) + "   |   " + str_List3.get(x) + "   |   " + str_List4.get(x) + "\n";
+				}
+				JOptionPane.showMessageDialog(mainPanel, resultList);
+				resultList = "";
+				str_List.clear();
+				str_List2.clear();
+				str_List3.clear();
+				str_List4.clear();
+				
+			}
+		});
+		fileMenu3.add(menuItem);
+		
+		menuItem = new JMenuItem("Sale History");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ResultSet rs = RQ.getSales();
+				try {
+					while (rs.next()) {
+						String sale_num = rs.getString("sale_num");
+						String m_id = rs.getString("m_id");
+						String sale_date = rs.getString("sale_date");
+						str_List.add(sale_num);
+						str_List2.add(m_id);
+						str_List3.add(sale_date);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				resultList += "Sale Number | Member ID | Sale Date \n";
+				for (int x = 0; x < str_List.size(); x++) {
+					resultList += str_List.get(x) + "   |   " + str_List2.get(x) + "   |   " + str_List3.get(x) + "\n";
 				}
 				JOptionPane.showMessageDialog(mainPanel, resultList);
 				resultList = "";

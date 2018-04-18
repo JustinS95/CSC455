@@ -107,12 +107,31 @@ public class RQ {
 			return rs;
 	}
 	
+	public static ResultSet getSales() {
+		stmt = null;
+	      try {
+	    	  stmt = data.conn.createStatement();
+	    	  String sql;
+	    	  sql = "SELECT sale_num, m_id, sale_date FROM sales;";
+	    	  rs = stmt.executeQuery(sql);
+	      }catch(SQLException se) {
+	    	      //Handle errors for JDBC
+	          se.printStackTrace();
+	       
+	       }catch(Exception e){	
+	    	      //Handle errors for Class.forName
+	          e.printStackTrace();
+	          }
+
+			return rs;
+	}
+	
 	public static ResultSet getDue(String date) {
 		stmt = null;
 	      try {
 	    	  stmt = data.conn.createStatement();
 	    	  String sql;
-	    	  sql = "SELECT rental_num, m_id FROM rentals where date_in = " + "\'" + date + "\';" ;
+	    	  sql = "SELECT rental_num, m_id FROM rentals where due_date = " + "\'" + date + "\' and date_in is null;" ;
 	    	  rs = stmt.executeQuery(sql);
 	      }catch(SQLException se) {
 	    	      //Handle errors for JDBC
@@ -193,26 +212,6 @@ public class RQ {
 	          e.printStackTrace();
 	          }		
 	}
-	
-	public static ResultSet getCommission() {
-		stmt = null;
-	      try {
-	    	  stmt = data.conn.createStatement();
-	    	  String sql;
-	    	  sql = "SELECT e_id,commission_rate FROM employees ORDER BY commission_rate";
-	    	  rs = stmt.executeQuery(sql);
-	      }catch(SQLException se) {
-	    	      //Handle errors for JDBC
-	          se.printStackTrace();
-	       
-	       }catch(Exception e){	
-	    	      //Handle errors for Class.forName
-	          e.printStackTrace();
-	          }
-
-			return rs;
-	}
-	
 	
 	public static ResultSet getMovies() {
 		
