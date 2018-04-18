@@ -40,7 +40,6 @@ public class Gui2 extends JFrame{
     static ArrayList<String> str_List3 = new ArrayList<String>();
     static ArrayList<String> str_List4 = new ArrayList<String>();
 	static String resultList = "";
-	static Boolean addAnother = true;
 
 	public Gui2() {
 		setSize(width, height);
