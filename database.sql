@@ -10,7 +10,7 @@ drop procedure if exists pointLookup;
 drop procedure if exists checkPrice;
 drop function if exists rentalTime;
 drop function if exists thisDate;
-DEALLOCATE PREPARE getUserInfo;
+
 
 
 create table store
@@ -126,4 +126,3 @@ BEGIN
 END $$
 DELIMITER ;
 
-PREPARE getUserInfo from 'select * from members where m_id = ?';
