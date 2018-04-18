@@ -11,6 +11,7 @@ public class RQ {
 	static Database data = new Database();
 	static Statement stmt = null;
 	
+	
 	public static ResultSet mostRecentMember() {
 		stmt = null;
 	      try {
@@ -212,10 +213,7 @@ public class RQ {
 			return rs;
 	}
 	
-	/** 
-	 * Gets an alphabetical list of movies from the database 
-	 * @return result set storing all movies in the database
-	 */
+	
 	public static ResultSet getMovies() {
 		
 	      //Create a statement and execute a query
@@ -237,10 +235,7 @@ public class RQ {
 			return rs;
 	       }
 	
-	/**
-	 * Gets a list of customers ordered by the ID's in ascending order
-	 * @return result set of all customers in the database
-	 */
+	
 	public static ResultSet getMembers() {
 		
 	      //Create a statement and execute a query

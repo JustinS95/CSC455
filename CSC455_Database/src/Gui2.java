@@ -20,6 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 @SuppressWarnings("serial")
+
+/**
+ * @author JustinSaunders, AshleyShepard
+ *Class to build the GUI and call functions from RQ class
+ *
+ */
 public class Gui2 extends JFrame{
 	private JMenuBar menuBar;
 	private JMenu fileMenu;
@@ -168,7 +174,6 @@ public class Gui2 extends JFrame{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String member_id = JOptionPane.showInputDialog(mainPanel, "Enter the user ID of the member you wish to remove.");
-				System.out.println("Removing user with ID: " + member_id);
 				RQ.removeUser(member_id);
 				
 			}
@@ -287,7 +292,6 @@ public class Gui2 extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String store_num = JOptionPane.showInputDialog(mainPanel, "Enter the store number of the new store.");
 				String address = JOptionPane.showInputDialog(mainPanel, "Enter the new store's address.");
-				System.out.println(store_num);
 				if (store_num != null && !store_num.equals("")) {
 					RQ.addStore(store_num, address);
 				}
@@ -302,10 +306,11 @@ public class Gui2 extends JFrame{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String memberID = JOptionPane.showInputDialog(mainPanel, "Enter the member's ID.");
+				String m_id = null;
 				try {
 					ResultSet rs = RQ.getInfo(memberID);
 					while (rs.next()) {
-						String m_id = rs.getString("m_id");
+						m_id = rs.getString("m_id");
 						String lname = rs.getString("lname");
 						String fname = rs.getString("fname");
 						String address = rs.getString("address");
@@ -318,14 +323,19 @@ public class Gui2 extends JFrame{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				resultList += "Member ID | Last Name | First Name | Address \n";
-				resultList += str_List.get(0) + "      |      " + str_List2.get(0) + "      |      " + str_List3.get(0) + "      |      " + str_List4.get(0) + "\n";
-				JOptionPane.showMessageDialog(mainPanel, resultList);
-				resultList = "";
-				str_List.clear();
-				str_List2.clear();
-				str_List3.clear();
-				str_List4.clear();
+				if(m_id != null && !m_id.equals("")) {
+					resultList += "Member ID   |   Last Name   |   First Name   |   Address \n";
+					resultList += str_List.get(0) + "      |      " + str_List2.get(0) + "      |      " + str_List3.get(0) + "      |      " + str_List4.get(0) + "\n";
+					JOptionPane.showMessageDialog(mainPanel, resultList);
+					resultList = "";
+					str_List.clear();
+					str_List2.clear();
+					str_List3.clear();
+					str_List4.clear();
+				}
+				else {
+					JOptionPane.showMessageDialog(mainPanel, "Please enter valid information and try again.");
+				}
 			}
 		});
 		fileMenu2.add(menuItem);
@@ -478,7 +488,7 @@ public class Gui2 extends JFrame{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				resultList += "Member ID | First Name | Last Name | Times Rented \n";
+				resultList += "Member ID | First Name | Last Name \n";
 				for (int x = 0; x < str_List.size(); x++) {
 					resultList += str_List.get(x) + "    |    " + str_List2.get(x) + "   |   " +  str_List3.get(x) + "\n";
 				}
